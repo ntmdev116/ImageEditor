@@ -2,4 +2,6 @@
     <string name="app_name">ImageEditor</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="trending_collection">Trending Collection</string>
+    <string name="trending_photos">Trending Photos</string>
 </resources>
