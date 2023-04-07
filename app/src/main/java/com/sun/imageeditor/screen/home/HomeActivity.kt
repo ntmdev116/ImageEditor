@@ -7,7 +7,7 @@ import com.sun.imageeditor.utils.ext.*
 class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::inflate) {
 
     override fun initView() {
-        addFragment(binding.frameHome.id, HomeFragment.newInstance())
+        replaceFragment(binding.frameHome.id, HomeFragment.newInstance(), false)
     }
 
     override fun initData() {

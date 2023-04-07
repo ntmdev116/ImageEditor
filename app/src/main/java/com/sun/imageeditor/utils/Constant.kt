@@ -1,4 +1,5 @@
 package com.sun.imageeditor.utils
 
-class Constant {
+object Constant {
+    const val COLLECTION_COVER_PHOTO = "COLLECTION_COVER_PHOTO"
 }

@@ -14,6 +14,10 @@ class PhotoDetailFragment : BaseFragment<FragmentPhotoDetailBinding>(FragmentPho
     override fun initData() {
     }
 
+    override fun initView() {
+
+    }
+
     companion object {
         fun newInstance() =
             PhotoDetailFragment()

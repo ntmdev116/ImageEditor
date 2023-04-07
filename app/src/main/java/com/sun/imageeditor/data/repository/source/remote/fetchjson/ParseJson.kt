@@ -21,12 +21,13 @@ class ParseJson {
     }
 
     fun photoParseJson(jsonObject: JSONObject): Photo {
+        val urlObject = jsonObject.getJSONObject(PhotoEntry.URLS)
         return Photo(
             id = jsonObject.getString(PhotoEntry.ID),
             description = jsonObject.optString(PhotoEntry.DESCRIPTION),
             altDescription = jsonObject.optString(PhotoEntry.ALT_DESCRIPTION),
-            photoUrl = jsonObject.getJSONObject(PhotoEntry.LINKS)
-                .getString(PhotoEntry.DOWNLOAD_LOCATION)
+            photoThumbUrl = urlObject.getString(PhotoEntry.THUMB),
+            photoFullUrl = urlObject.getString(PhotoEntry.FULL),
         )
     }
 }

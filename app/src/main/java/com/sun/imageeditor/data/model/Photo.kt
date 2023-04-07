@@ -4,7 +4,8 @@ data class Photo(
     val id: String,
     val description: String?,
     val altDescription: String?,
-    val photoUrl: String,
+    val photoThumbUrl: String,
+    val photoFullUrl: String,
 )
 
 object PhotoEntry {
@@ -13,6 +14,8 @@ object PhotoEntry {
     const val ID = "id"
     const val DESCRIPTION = "description"
     const val ALT_DESCRIPTION = "alt_description"
-    const val LINKS = "links"
-    const val DOWNLOAD_LOCATION = "download_location"
+
+    const val URLS = "urls"
+    const val THUMB = "thumb"
+    const val FULL = "full"
 }

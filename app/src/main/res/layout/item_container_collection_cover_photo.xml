@@ -16,10 +16,23 @@
             android:id="@+id/image_cover_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@color/light_grey"
             android:scaleType="centerCrop" />
 
     </androidx.cardview.widget.CardView>
+
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:elevation="@dimen/dp_2"
+        android:background="@color/light_grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/dp_16"
+        android:visibility="gone"/>
 
     <TextView
         android:elevation="@dimen/dp_2"

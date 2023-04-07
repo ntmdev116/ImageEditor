@@ -1,11 +1,65 @@
 package com.sun.imageeditor.screen.home
 
+import com.sun.imageeditor.data.model.Photo
+import com.sun.imageeditor.data.model.PhotoCollection
+import com.sun.imageeditor.data.repository.PhotoCollectionRepository
+import com.sun.imageeditor.data.repository.source.OnResultListener
 import com.sun.imageeditor.utils.base.BasePresenter
 
-class HomePresenter : BasePresenter {
+class HomePresenter internal constructor(private val photoCollectionRepository: PhotoCollectionRepository?) :
+    BasePresenter, HomeContract.Presenter {
+
+    private var mView: HomeContract.View? = null
+    private var mCurrentPhotoPage = 1
+    private var mCurrentCollectionPage = 1
+
     override fun onStart() {
     }
 
     override fun onStop() {
+    }
+
+    override fun getPhotoCollections() {
+        photoCollectionRepository?.getPhotoCollections(
+            object : OnResultListener<MutableList<PhotoCollection>> {
+                override fun onSuccess(list: MutableList<PhotoCollection>) {
+                    mView?.onGetPhotoCollectionsSuccess(list)
+                    mCurrentCollectionPage += 1
+                }
+
+                override fun onFail(msg: String) {
+                    mView?.onError(msg)
+                }
+
+            },
+            page = mCurrentCollectionPage,
+            perPage = DEFAULT_PER_PAGE
+        )
+    }
+
+    override fun getPhotos() {
+        photoCollectionRepository?.getPhotos(
+            object : OnResultListener<MutableList<Photo>> {
+                override fun onSuccess(list: MutableList<Photo>) {
+                    mView?.onGetPhotosSuccess(list)
+                    mCurrentPhotoPage += 1
+                }
+
+                override fun onFail(msg: String) {
+                    mView?.onError(msg)
+                }
+
+            },
+            page = mCurrentPhotoPage,
+            perPage = DEFAULT_PER_PAGE
+        )
+    }
+
+    override fun setView(view: HomeContract.View) {
+        mView = view
+    }
+
+    companion object {
+        private const val DEFAULT_PER_PAGE = 10
     }
 }
