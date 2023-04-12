@@ -32,4 +32,8 @@ abstract class BaseFragment<VB : ViewBinding>(
 
     abstract fun initData()
     abstract fun initView()
+
+    open fun onBackPressed(): Boolean {
+        return false
+    }
 }

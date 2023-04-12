@@ -1,9 +1,13 @@
 package com.sun.imageeditor.screen.home
 
+import android.os.Bundle
 import com.sun.imageeditor.data.model.Photo
 import com.sun.imageeditor.data.model.PhotoCollection
 import com.sun.imageeditor.data.repository.PhotoCollectionRepository
 import com.sun.imageeditor.data.repository.source.OnResultListener
+import com.sun.imageeditor.screen.collectiondetail.CollectionDetailActivity
+import com.sun.imageeditor.screen.search.SearchActivity
+import com.sun.imageeditor.utils.Constant
 import com.sun.imageeditor.utils.base.BasePresenter
 
 class HomePresenter internal constructor(private val photoCollectionRepository: PhotoCollectionRepository?) :
@@ -17,6 +21,21 @@ class HomePresenter internal constructor(private val photoCollectionRepository: 
     }
 
     override fun onStop() {
+    }
+
+    fun onPhotoClick(url: String?) {
+        mView?.showPhoto(url)
+    }
+
+    fun onCollectionClick(id: String?) {
+        mView?.startNewActivity(
+            CollectionDetailActivity::class.java,
+            Bundle().apply { putString(Constant.COLLECTION_ID_KEY, id) }
+        )
+    }
+
+    fun onSearchButtonClick() {
+        mView?.startNewActivity(SearchActivity::class.java)
     }
 
     override fun getPhotoCollections() {

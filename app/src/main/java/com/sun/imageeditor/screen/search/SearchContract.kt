@@ -1,15 +1,12 @@
-package com.sun.imageeditor.screen.home
+package com.sun.imageeditor.screen.search
 
-import android.os.Bundle
 import com.sun.imageeditor.data.model.Photo
 import com.sun.imageeditor.data.model.PhotoCollection
 
-class HomeContract {
+class SearchContract {
     interface View {
         fun onGetPhotoCollectionsSuccess(collections: MutableList<PhotoCollection>)
         fun onGetPhotosSuccess(photos: MutableList<Photo>)
-        fun showPhoto(url: String?)
-        fun startNewActivity(activityClass: Class<*>, bundle: Bundle? = null)
         fun onError(msg: String?)
     }
 

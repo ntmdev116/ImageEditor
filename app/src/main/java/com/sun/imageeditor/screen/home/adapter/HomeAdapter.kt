@@ -22,6 +22,10 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var isPhotoLoading: Boolean = true
     var initialDataIndex: Int = 0
 
+    fun setOnPhotoClick(onClick: OnItemRecyclerViewClickListener<String>) {
+        mOnPhotoClick = onClick
+    }
+
     fun setOnCollectionScrollListener(listener: RecyclerView.OnScrollListener) {
         mOnCollectionScrollListener = listener
     }
@@ -134,7 +138,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             binding.imagePhoto.let {
                 it.setOnClickListener {
-                    mOnPhotoClick?.onItemClick(item.id)
+                    mOnPhotoClick?.onItemClick(item.photoFullUrl)
                 }
                 it.isClickable = true
                 it.loadImageWithUrl(item.photoThumbUrl, R.color.light_grey)

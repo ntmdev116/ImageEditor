@@ -15,6 +15,10 @@ class CollectionCoverPhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     private var mOnItemClick: OnItemRecyclerViewClickListener<String>? = null
     var isLoading = true
 
+    fun setOnItemClick(onClick: OnItemRecyclerViewClickListener<String>) {
+        mOnItemClick = onClick
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_VIEW_ITEM -> CoverPhotoViewHolder(ItemContainerCollectionCoverPhotoBinding.inflate(
@@ -70,6 +74,7 @@ class CollectionCoverPhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 it.isClickable = true
                 it.loadImageWithUrl(item.coverPhotoUrl, R.color.light_grey)
+                it.setOnClickListener { mOnItemClick?.onItemClick(item.id) }
             }
 
             binding.textCollectionTitle.text = item.title
