@@ -7,21 +7,47 @@
     tools:context=".screen.collectiondetail.CollectionDetailActivity">
 
     <ImageButton
+        android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@color/transparent"
         android:src="@drawable/ic_arrow_back"
+        app:tint="?attr/colorContrast"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="?attr/colorPrimary"
-        />
+        android:elevation="@dimen/dp_1"/>
+
+    <TextView
+        android:id="@+id/text_collection_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/button_back"
+        app:layout_constraintTop_toTopOf="@id/button_back"
+        app:layout_constraintStart_toEndOf="@id/button_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="1"
+        android:layout_marginEnd="@dimen/dp_48"
+        android:textColor="?attr/colorContrast"
+        android:text="@string/app_name"
+        android:elevation="@dimen/dp_1"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_home"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        android:paddingTop="@dimen/dp_32"
+        android:layout_height="@dimen/dp_0"
         android:clipToPadding="false"
+        android:layout_marginTop="@dimen/dp_16"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_collection_name"
         app:spanCount="2" />
 
+    <FrameLayout
+        android:id="@+id/frame_photos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:elevation="@dimen/dp_2"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

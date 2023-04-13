@@ -14,6 +14,11 @@ class CollectionCoverPhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     private val mCoverPhotos = mutableListOf<PhotoCollection>()
     private var mOnItemClick: OnItemRecyclerViewClickListener<String>? = null
     var isLoading = true
+        set(value) {
+            if (!value) notifyItemRemoved(mCoverPhotos.size)
+            else notifyItemInserted(mCoverPhotos.size)
+            field = value
+        }
 
     fun setOnItemClick(onClick: OnItemRecyclerViewClickListener<String>) {
         mOnItemClick = onClick
@@ -35,7 +40,7 @@ class CollectionCoverPhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    override fun getItemCount(): Int = mCoverPhotos.size + 1
+    override fun getItemCount(): Int = mCoverPhotos.size + if (isLoading) 1 else 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {

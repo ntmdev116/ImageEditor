@@ -8,6 +8,7 @@ class CollectionDetailContract {
         fun onGetPhotoCollectionsSuccess(collections: MutableList<PhotoCollection>)
         fun onGetPhotosSuccess(photos: MutableList<Photo>)
         fun onError(msg: String?)
+        fun getCollectionId(): String?
     }
 
     interface Presenter {

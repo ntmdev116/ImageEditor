@@ -37,7 +37,8 @@ class GetJsonFromUrl<T>(
 
                 mHandler.post {
                     try {
-                        data?.let { listener.onSuccess(it) }
+                        if (data == null) listener.onFail(ApiConstant.EMPTY_RESOURCE)
+                        else data?.let { listener.onSuccess(it) }
                     } catch (e: Exception) {
                         listener.onFail(e.toString())
                     }

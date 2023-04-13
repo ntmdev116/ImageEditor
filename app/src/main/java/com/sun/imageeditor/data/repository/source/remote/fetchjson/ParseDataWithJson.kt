@@ -42,16 +42,17 @@ class ParseDataWithJson {
                         }
                     }
 
-                    return data
+                    if (data.size > 0) return data
+                    return null
                 } catch (e: JSONException) {
-                    e.printStackTrace()
+                    throw e
                 }
             }
             is JSONObject -> {
                 try {
                     return parseJsonToObject(jsonElement, keyEntity)
                 } catch (e: JSONException) {
-                    e.printStackTrace()
+                    throw e
                 }
             }
         }

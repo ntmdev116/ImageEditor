@@ -10,7 +10,7 @@ class ApiHelper {
         return "${ApiConstant.COLLECTION_URL}/$id"
     }
 
-    fun getCollectionPhotosUrl(id: String, page: Int = 1, perPage: Int = 10): String {
+    fun getCollectionPhotosUrl(id: String?, page: Int = 1, perPage: Int = 10): String {
         return "${ApiConstant.COLLECTION_URL}/$id/photos?page=$page&per_page=$perPage"
     }
 

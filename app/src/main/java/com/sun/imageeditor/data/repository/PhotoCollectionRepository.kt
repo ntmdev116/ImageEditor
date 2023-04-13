@@ -23,6 +23,15 @@ class PhotoCollectionRepository(private val remote: PhotoCollectionDataSource.Re
         remote.searchPhotoCollections(listener, page, perPage, query)
     }
 
+    override fun getCollectionPhotos(
+        listener: OnResultListener<MutableList<Photo>>,
+        id: String?,
+        page: Int,
+        perPage: Int
+    ) {
+        remote.getCollectionPhotos(listener, id, page, perPage)
+    }
+
     override fun getPhotos(
         listener: OnResultListener<MutableList<Photo>>,
         page: Int,

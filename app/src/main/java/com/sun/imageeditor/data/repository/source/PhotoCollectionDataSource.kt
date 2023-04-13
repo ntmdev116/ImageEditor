@@ -18,6 +18,13 @@ class PhotoCollectionDataSource {
             query: String
         )
 
+        fun getCollectionPhotos(
+            listener: OnResultListener<MutableList<Photo>>,
+            id: String?,
+            page: Int,
+            perPage: Int
+        )
+
         fun getPhotos(
             listener: OnResultListener<MutableList<Photo>>,
             page: Int,

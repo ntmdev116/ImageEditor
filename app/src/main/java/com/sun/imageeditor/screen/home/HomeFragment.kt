@@ -2,6 +2,9 @@ package com.sun.imageeditor.screen.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.imageeditor.R
@@ -119,8 +122,11 @@ class HomeFragment :
     }
 
     override fun onError(msg: String?) {
-        mHomeAdapter.isPhotoLoading = false
-        mCollectionAdapter.isLoading = false
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            mHomeAdapter.isPhotoLoading = false
+            mCollectionAdapter.isLoading = false
+        }
     }
 
     companion object {

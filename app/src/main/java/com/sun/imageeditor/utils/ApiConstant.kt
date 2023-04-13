@@ -14,4 +14,5 @@ object ApiConstant {
     const val AUTHORIZATION_HEADER = "Authorization"
 
     const val CONNECTION_ERROR = "Connection Error"
+    const val EMPTY_RESOURCE = "Empty Resource"
 }

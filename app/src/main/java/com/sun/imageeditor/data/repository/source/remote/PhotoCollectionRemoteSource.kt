@@ -35,6 +35,19 @@ class PhotoCollectionRemoteSource: PhotoCollectionDataSource.Remote {
         )
     }
 
+    override fun getCollectionPhotos(
+        listener: OnResultListener<MutableList<Photo>>,
+        id: String?,
+        page: Int,
+        perPage: Int
+    ) {
+        GetJsonFromUrl(
+            ApiHelper().getCollectionPhotosUrl(id, page, perPage),
+            PhotoEntry.PHOTO,
+            listener
+        )
+    }
+
     override fun getPhotos(
         listener: OnResultListener<MutableList<Photo>>,
         page: Int,
