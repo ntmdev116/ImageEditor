@@ -85,7 +85,7 @@ class HomeFragment :
                         return when (mHomeAdapter.getItemViewType(position)) {
                             HomeAdapter.TYPE_VIEW_RECYCLER_VIEW, HomeAdapter.TYPE_VIEW_TITLE -> 2
                             HomeAdapter.TYPE_VIEW_ITEM -> 1
-                            else -> throw IllegalStateException()
+                            else -> throw IllegalStateException(HomeAdapter.ILLEGAL_VIEW_TYPE_ERROR)
                         }
                     }
                 }

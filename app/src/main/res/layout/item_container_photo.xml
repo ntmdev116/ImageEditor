@@ -11,6 +11,7 @@
         android:id="@+id/card_photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/dp_8"
         app:cardCornerRadius="@dimen/dp_8">
 
         <ImageView

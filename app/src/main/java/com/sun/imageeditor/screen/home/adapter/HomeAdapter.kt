@@ -69,7 +69,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     false
                 ))
             }
-            else -> throw IllegalStateException()
+            else -> throw IllegalStateException(ILLEGAL_VIEW_TYPE_ERROR)
         }
     }
 
@@ -163,5 +163,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         const val TYPE_VIEW_ITEM = 0
         const val TYPE_VIEW_TITLE = 2
         const val TYPE_VIEW_RECYCLER_VIEW = 3
+
+        const val ILLEGAL_VIEW_TYPE_ERROR = "ILLEGAL_VIEW_TYPE_ERROR"
     }
 }

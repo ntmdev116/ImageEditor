@@ -36,7 +36,7 @@ class CollectionCoverPhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                 parent,
                 false
             ))
-            else -> throw IllegalStateException()
+            else -> throw IllegalStateException(ILLEGAL_VIEW_TYPE_ERROR)
         }
     }
 
@@ -103,5 +103,7 @@ class CollectionCoverPhotoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     companion object {
         private const val TYPE_VIEW_ITEM = 0
         private const val TYPE_VIEW_LOADING = 1
+
+        const val ILLEGAL_VIEW_TYPE_ERROR = "ILLEGAL_VIEW_TYPE_ERROR"
     }
 }

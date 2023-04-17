@@ -59,7 +59,7 @@ class CollectionDetailActivity :
     }
 
     override fun onGetPhotoCollectionsSuccess(collections: MutableList<PhotoCollection>) {
-
+        // TODO Not yet implemented
     }
 
     override fun onGetPhotosSuccess(photos: MutableList<Photo>) {

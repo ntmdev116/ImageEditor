@@ -2,7 +2,7 @@ package com.sun.imageeditor.screen.home
 
 import com.sun.imageeditor.databinding.ActivityHomeBinding
 import com.sun.imageeditor.utils.base.BaseActivity
-import com.sun.imageeditor.utils.ext.*
+import com.sun.imageeditor.utils.ext.replaceFragment
 
 class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::inflate) {
 
@@ -11,5 +11,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(ActivityHomeBinding::infl
     }
 
     override fun initData() {
+        // TODO Not yet implemented
     }
 }

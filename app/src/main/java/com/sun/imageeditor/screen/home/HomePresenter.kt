@@ -18,9 +18,11 @@ class HomePresenter internal constructor(private val photoCollectionRepository: 
     private var mCurrentCollectionPage = 1
 
     override fun onStart() {
+        // TODO Not yet implemented
     }
 
     override fun onStop() {
+        // TODO Not yet implemented
     }
 
     fun onPhotoClick(url: String?) {

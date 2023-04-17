@@ -11,6 +11,7 @@ class CollectionDetailPresenter internal constructor(
     private var mView: CollectionDetailContract.View? = null
     private var mCurrentPage: Int = 1
     override fun getPhotoCollections() {
+        // TODO Not yet implemented
     }
 
     override fun getPhotos() {
@@ -38,9 +39,11 @@ class CollectionDetailPresenter internal constructor(
     }
 
     override fun onStart() {
+        // TODO Not yet implemented
     }
 
     override fun onStop() {
+        // TODO Not yet implemented
     }
 
     companion object {

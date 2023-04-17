@@ -2,10 +2,13 @@ package com.sun.imageeditor.data.repository.source.remote.fetchjson
 
 import android.os.Handler
 import android.os.Looper
+import com.sun.imageeditor.data.model.PhotoCollectionEntry
+import com.sun.imageeditor.data.model.PhotoEntry
 import com.sun.imageeditor.data.repository.source.OnResultListener
 import com.sun.imageeditor.utils.ApiConstant
 import org.brotli.dec.BrotliInputStream
 import org.json.JSONException
+import org.json.JSONObject
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -21,7 +24,6 @@ class GetJsonFromUrl<T>(
 
     private val mExecutor: Executor = Executors.newSingleThreadExecutor()
     private val mHandler = Handler(Looper.getMainLooper())
-    private var exception: Exception? = null
     private var data: T? = null
 
     init {
@@ -32,26 +34,45 @@ class GetJsonFromUrl<T>(
         mExecutor.execute {
             try {
                 val responseJson =
-                    getJsonFromUrl(urlString)
-                data = ParseDataWithJson().parseJsonToData(responseJson, keyEntity) as? T
+                    getJsonFromApi(urlString)
+
+                val (jsonString, newKeyEntity) = convertKeyEntity(responseJson, keyEntity)
+                data = ParseDataWithJson().parseJsonToData(jsonString, newKeyEntity) as? T
 
                 mHandler.post {
-                    try {
-                        if (data == null) listener.onFail(ApiConstant.EMPTY_RESOURCE)
-                        else data?.let { listener.onSuccess(it) }
-                    } catch (e: Exception) {
-                        listener.onFail(e.toString())
-                    }
+                    if (data == null) listener.onFail(ApiConstant.EMPTY_RESOURCE)
+                    else data?.let { listener.onSuccess(it) }
                 }
             } catch (e: JSONException) {
                 listener.onFail(e.toString())
             } catch (e: IOException) {
-                listener.onFail(ApiConstant.CONNECTION_ERROR)
+                listener.onFail("${ApiConstant.CONNECTION_ERROR}: ${e.message}")
             }
         }
     }
 
-    private fun getJsonFromUrl(urlString: String): String {
+    private fun convertKeyEntity(jsonString: String?, keyEntity: String)
+    : Pair<String?, String> {
+        return when (keyEntity) {
+            PhotoCollectionEntry.SEARCH_PHOTO_COLLECTION -> {
+                val jsonObject = jsonString?.let { JSONObject(it) }
+                Pair(
+                    jsonObject?.getJSONArray(ApiConstant.RESULT_ENTRY).toString(),
+                    PhotoCollectionEntry.PHOTO_COLLECTION
+                )
+            }
+            PhotoEntry.SEARCH_PHOTO -> {
+                val jsonObject = jsonString?.let { JSONObject(it) }
+                Pair(
+                    jsonObject?.getJSONArray(ApiConstant.RESULT_ENTRY).toString(),
+                    PhotoEntry.PHOTO
+                )
+            }
+            else -> Pair(jsonString, keyEntity)
+        }
+    }
+
+    private fun getJsonFromApi(urlString: String): String {
         val url = URL(urlString)
         val httpURLConnection = url.openConnection() as? HttpURLConnection
         httpURLConnection?.run {

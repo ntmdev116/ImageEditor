@@ -2,6 +2,7 @@ package com.sun.imageeditor.utils.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
@@ -22,4 +23,9 @@ abstract class BaseActivity<VB : ViewBinding>(
 
     abstract fun initView()
     abstract fun initData()
+
+    fun hideKeyboard() {
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    }
 }
