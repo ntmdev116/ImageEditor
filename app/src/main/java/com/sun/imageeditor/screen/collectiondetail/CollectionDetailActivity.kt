@@ -48,7 +48,12 @@ class CollectionDetailActivity :
 
         mCollectionPhotosAdapter.setOnPhotoClick(object : OnItemRecyclerViewClickListener<String> {
             override fun onItemClick(parameter: String?) {
-                addFragment(binding.framePhotos.id, PhotoDetailFragment.newInstance())
+                parameter?.let {
+                    addFragment(
+                        binding.framePhotos.id,
+                        PhotoDetailFragment.newInstance(it)
+                    )
+                }
             }
         })
         mPresenter.setView(this)

@@ -176,7 +176,12 @@ class SearchActivity :
     }
 
     override fun showPhoto(url: String?) {
-        addFragment(binding.framePhoto.id, PhotoDetailFragment.newInstance())
+        url?.let {
+            addFragment(
+                binding.framePhoto.id,
+                PhotoDetailFragment.newInstance(it)
+            )
+        }
     }
 
     override fun startNewActivity(activityClass: Class<*>, bundle: Bundle?) {

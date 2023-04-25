@@ -112,7 +112,12 @@ class HomeFragment :
     }
 
     override fun showPhoto(url: String?) {
-        addFragment(binding.root.id, PhotoDetailFragment.newInstance())
+        url?.let {
+            addFragment(
+                binding.root.id,
+                PhotoDetailFragment.newInstance(it)
+            )
+        }
     }
 
     override fun startNewActivity(activityClass: Class<*>, bundle: Bundle?) {

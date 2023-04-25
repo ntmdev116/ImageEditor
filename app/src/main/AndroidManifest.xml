@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ImageEditor"
         tools:targetApi="31">
+        <service
+            android:name=".service.ImageDownloadService"
+            android:label="Download Service" />
         <activity
             android:name=".screen.search.SearchActivity"
             android:exported="false"
