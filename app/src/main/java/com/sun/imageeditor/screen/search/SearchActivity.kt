@@ -2,6 +2,7 @@ package com.sun.imageeditor.screen.search
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sun.imageeditor.data.repository.PhotoCollectionRepository
+import com.sun.imageeditor.data.repository.RecentSearchRepository
+import com.sun.imageeditor.data.repository.source.database.RecentSearchDatabase
 import com.sun.imageeditor.data.repository.source.remote.PhotoCollectionRemoteSource
 import com.sun.imageeditor.databinding.ActivitySearchBinding
 import com.sun.imageeditor.screen.detail.PhotoDetailFragment
@@ -27,7 +30,11 @@ class SearchActivity :
         SearchPresenter(
             PhotoCollectionRepository.getInstance(
                 PhotoCollectionRemoteSource.getInstance()
-            ))
+            ),
+            RecentSearchRepository.getInstance(
+                RecentSearchDatabase.getInstance(applicationContext)
+            ),
+        )
     }
 
     private val mTabList by lazy {
@@ -87,7 +94,6 @@ class SearchActivity :
                 parameter?.let {
                     val query = mRecentSearchAdapter.getRecentSearch(parameter)
                     binding.searchView.setQuery(query, true)
-                    mPresenter.onRecentSearchClick()
                 }
             }
         })
@@ -181,9 +187,17 @@ class SearchActivity :
         )
     }
 
-    override fun onGetRecentSearchSuccess(queries: MutableList<String>) {
-        mRecentSearchAdapter.addData(queries)
-        mRecentSearchAdapter.isLoading = false
+    override fun onGetRecentSearchSuccess(queries: List<String>, isFirstPage: Boolean) {
+        Handler(Looper.getMainLooper()).post {
+            if (isFirstPage) {
+                mRecentSearchAdapter.setData(queries)
+                binding.recyclerRecentSearch.scrollToPosition(0)
+            } else {
+                mRecentSearchAdapter.addData(queries)
+            }
+
+            mRecentSearchAdapter.isLoading = false
+        }
     }
 
     override fun <T : Any> onGetItemsSuccess(
@@ -197,7 +211,7 @@ class SearchActivity :
     }
 
     override fun onError(msg: String?, tabIndex: Int) {
-        android.os.Handler(Looper.getMainLooper()).post {
+        Handler(Looper.getMainLooper()).post {
             (mTabList[tabIndex] as? SearchResultFragment)?.onError(msg)
         }
     }

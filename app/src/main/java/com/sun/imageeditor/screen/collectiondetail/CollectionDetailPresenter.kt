@@ -17,8 +17,8 @@ class CollectionDetailPresenter internal constructor(
     override fun getPhotos() {
         photoCollectionRepository?.getCollectionPhotos(
             object : OnResultListener<MutableList<Photo>> {
-                override fun onSuccess(list: MutableList<Photo>) {
-                    mView?.onGetPhotosSuccess(list)
+                override fun onSuccess(result: MutableList<Photo>) {
+                    mView?.onGetPhotosSuccess(result)
                     mCurrentPage++
                 }
 

@@ -1,6 +1,6 @@
 package com.sun.imageeditor.data.repository.source
 
 interface OnResultListener<T> {
-    fun onSuccess(list: T)
+    fun onSuccess(result: T)
     fun onFail(msg: String)
 }

@@ -15,7 +15,7 @@ class SearchContract {
         fun showPhoto(url: String?)
         fun startNewActivity(activityClass: Class<*>, bundle: Bundle? = null)
         fun <T: Any> onGetItemsSuccess(items: MutableList<T>, tabIndex: Int, isFirstPage: Boolean)
-        fun onGetRecentSearchSuccess(queries: MutableList<String>)
+        fun onGetRecentSearchSuccess(queries: List<String>, isFirstPage: Boolean)
         fun onError(msg: String?, tabIndex: Int)
     }
 

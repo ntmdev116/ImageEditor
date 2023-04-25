@@ -16,8 +16,7 @@
         android:src="@drawable/ic_arrow_back"
         app:tint="?attr/colorContrast"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="@dimen/dp_1"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <SearchView
         android:id="@+id/searchView"

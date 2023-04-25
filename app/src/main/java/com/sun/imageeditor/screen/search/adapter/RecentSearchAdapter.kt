@@ -12,7 +12,13 @@ class RecentSearchAdapter : RecyclerView.Adapter<RecentSearchAdapter.RecentSearc
 
     var isLoading = true
 
-    fun addData(list: MutableList<String>) {
+    fun setData(list: List<String>) {
+        mData.clear()
+        mData.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun addData(list: List<String>) {
         val startPosition = mData.size
         mData.addAll(list)
         notifyItemRangeInserted(startPosition, list.size)

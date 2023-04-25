@@ -43,8 +43,8 @@ class HomePresenter internal constructor(private val photoCollectionRepository: 
     override fun getPhotoCollections() {
         photoCollectionRepository?.getPhotoCollections(
             object : OnResultListener<MutableList<PhotoCollection>> {
-                override fun onSuccess(list: MutableList<PhotoCollection>) {
-                    mView?.onGetPhotoCollectionsSuccess(list)
+                override fun onSuccess(result: MutableList<PhotoCollection>) {
+                    mView?.onGetPhotoCollectionsSuccess(result)
                     mCurrentCollectionPage += 1
                 }
 
@@ -61,8 +61,8 @@ class HomePresenter internal constructor(private val photoCollectionRepository: 
     override fun getPhotos() {
         photoCollectionRepository?.getPhotos(
             object : OnResultListener<MutableList<Photo>> {
-                override fun onSuccess(list: MutableList<Photo>) {
-                    mView?.onGetPhotosSuccess(list)
+                override fun onSuccess(result: MutableList<Photo>) {
+                    mView?.onGetPhotosSuccess(result)
                     mCurrentPhotoPage += 1
                 }
 
