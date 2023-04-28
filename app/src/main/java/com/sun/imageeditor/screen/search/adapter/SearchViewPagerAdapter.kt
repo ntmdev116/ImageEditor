@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 class SearchViewPagerAdapter(fm: FragmentManager, lc: Lifecycle) : FragmentStateAdapter(fm, lc) {
     private val fragments = mutableListOf<Fragment>()
 
-    fun setTabList(list: MutableList<Fragment>) {
+    fun setTabList(list: List<Fragment>) {
         fragments.run {
             clear()
             addAll(list)

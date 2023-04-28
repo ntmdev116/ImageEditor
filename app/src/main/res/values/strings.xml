@@ -13,4 +13,12 @@
     <string name="download_service_error">Error downloading image</string>
     <string name="download_file_name">image_%s.jpg</string>
     <string name="text_cancel">Cancel</string>
+    <string name="title_edit_dialog">Discard Changes?</string>
+    <string name="message_edit_dialog">Your changes are not saved</string>
+    <string name="text_discard">Discard</string>
+    <string name="text_keep_editing">Keep Editing</string>
+    <string name="permission_request_title">We need permission for this feature</string>
+    <string name="permission_request_message">Please grant permission to continue</string>
+    <string name="allow">Allow</string>
+    <string name="permission_request_denied">Permission denied</string>
 </resources>

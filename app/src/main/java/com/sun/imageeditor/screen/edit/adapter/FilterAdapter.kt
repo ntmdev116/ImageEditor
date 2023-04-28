@@ -1,5 +1,6 @@
 package com.sun.imageeditor.screen.edit.adapter
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,6 +13,7 @@ import com.sun.imageeditor.utils.OnItemRecyclerViewClickListener
 class FilterAdapter : RecyclerView.Adapter<FilterAdapter.FilterTypeViewHolder>() {
     private var selectedPosition = 0
     private val mFilterList = mutableListOf<FilterType>()
+    private val mFilterPreviewList = mutableMapOf<FilterType, Bitmap?>()
     private var mOnItemClickListener: OnItemRecyclerViewClickListener<FilterType>? = null
 
     fun setFilterList(list: List<FilterType>) {
@@ -22,6 +24,13 @@ class FilterAdapter : RecyclerView.Adapter<FilterAdapter.FilterTypeViewHolder>()
 
     fun setOnItemClickListener(onItemClick: OnItemRecyclerViewClickListener<FilterType>) {
         mOnItemClickListener = onItemClick
+    }
+
+    fun setPreviewBitmap(filterType: FilterType, bitmap: Bitmap) {
+        mFilterPreviewList[filterType] = bitmap
+        val index = mFilterList.indexOf(filterType)
+        if (index != -1)
+            notifyItemChanged(mFilterList.indexOf(filterType))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterTypeViewHolder {
@@ -68,6 +77,10 @@ class FilterAdapter : RecyclerView.Adapter<FilterAdapter.FilterTypeViewHolder>()
                 binding.textFilterName.setTextColor(
                     ContextCompat.getColor(binding.root.context, R.color.default_text)
                 )
+            }
+
+            mFilterPreviewList[item]?.let {
+                binding.imageFilterPreview.setImageBitmap(it)
             }
         }
     }
