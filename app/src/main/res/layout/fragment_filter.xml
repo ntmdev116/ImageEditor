@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".screen.edit.FilterFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_filter_chooser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingStart="@dimen/dp_0"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="horizontal"
+        tools:listitem="@layout/item_filter_type" />
+
+</FrameLayout>

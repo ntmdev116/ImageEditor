@@ -12,4 +12,5 @@
     <string name="image_download_service_notification_message_fail">Download Fail</string>
     <string name="download_service_error">Error downloading image</string>
     <string name="download_file_name">image_%s.jpg</string>
+    <string name="text_cancel">Cancel</string>
 </resources>

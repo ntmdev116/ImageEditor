@@ -1,8 +1,10 @@
 package com.sun.imageeditor.screen.detail
 
+import android.content.Intent
 import android.os.Bundle
 import com.sun.imageeditor.R
 import com.sun.imageeditor.databinding.FragmentPhotoDetailBinding
+import com.sun.imageeditor.screen.edit.EditActivity
 import com.sun.imageeditor.utils.base.BaseFragment
 import com.sun.imageeditor.utils.ext.loadOriginalImageWithUrl
 
@@ -28,6 +30,15 @@ class PhotoDetailFragment : BaseFragment<FragmentPhotoDetailBinding>(FragmentPho
         binding.linearDownload.setOnClickListener {
             mImageUrl?.let { url ->
                 mPresenter.downloadImage(context, url)
+            }
+        }
+        binding.linearEdit.setOnClickListener {
+            mImageUrl?.let { url ->
+                startActivity(
+                    Intent(context, EditActivity::class.java).apply {
+                        putExtra(EditActivity.IMAGE_URL, url)
+                    }
+                )
             }
         }
 

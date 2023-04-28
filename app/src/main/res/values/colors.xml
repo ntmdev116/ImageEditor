@@ -15,4 +15,7 @@
     <color name="darker_grey">#2B2B2B</color>
 
     <color name="transparent">#00FFFFFF</color>
+
+    <color name="selected_text">#E1E1E1</color>
+    <color name="default_text">#787878</color>
 </resources>

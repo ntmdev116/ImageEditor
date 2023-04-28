@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="EditScreenTheme" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="colorPrimary">@color/dark_grey</item>
+        <item name="android:background">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/lighter_grey</item>
+    </style>
+
+    <style name="EditTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorHeight">@dimen/dp_24</item>
+        <item name="tabTextAppearance">@style/EditTabTextAppearance</item>
+        <item name="tabSelectedTextColor">@color/selected_text</item>
+        <item name="tabMode">scrollable</item>
+        <item name="tabIndicator">@drawable/tab_indicator</item>
+        <item name="indicatorColor">@color/dark_grey</item>
+        <item name="tabIndicatorColor">@color/dark_grey</item>
+        <item name="tabGravity">center</item>
+        <item name="tabIndicatorAnimationMode">elastic</item>
+    </style>
+
+    <style name="EditTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/default_text</item>
+        <item name="android:maxLines">1</item>
+    </style>
+</resources>
