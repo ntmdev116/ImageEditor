@@ -3,9 +3,12 @@ package com.sun.imageeditor.screen.edit
 import android.content.Context
 import android.graphics.Bitmap
 import com.sun.imageeditor.data.repository.source.OnResultListener
+import com.sun.imageeditor.utils.EditParameters
+import com.sun.imageeditor.utils.EditType
+import com.sun.imageeditor.utils.FilterType
 import com.sun.imageeditor.utils.ImageProcessor
 
-class EditPresenter : EditContract.Presenter {
+class EditPresenter private constructor() : EditContract.Presenter {
     private var mImageProcessor: ImageProcessor? = null
     private var mView: EditContract.View? = null
 
@@ -31,14 +34,52 @@ class EditPresenter : EditContract.Presenter {
     }
 
     override fun setBitmap(bitmap: Bitmap) {
-        mImageProcessor = ImageProcessor(bitmap)
+        mImageProcessor = ImageProcessor(bitmap).apply {
+            onResultListener = object : OnResultListener<Bitmap> {
+                override fun onSuccess(result: Bitmap) {
+                    mView?.onGetProcessedBitmap(result)
+                }
+
+                override fun onFail(msg: String) {
+                    // TODO
+                }
+            }
+        }
     }
 
     override fun setView(view: EditContract.View) {
         mView = view
     }
 
+    fun getFilterPreview(filterType: FilterType) {
+        mImageProcessor?.getFilterPreview(
+            filterType,
+            object : OnResultListener<Bitmap> {
+                override fun onSuccess(result: Bitmap) {
+                    mView?.onGetFilterPreviewSuccess(filterType, result)
+                }
+
+                override fun onFail(msg: String) {
+                    // TODO
+                }
+            }
+        )
+    }
+
+    fun onEditButtonClick(editType: EditType, editParameters: EditParameters) {
+        mImageProcessor?.edit(editType, editParameters)
+    }
+
     companion object {
         const val NOT_YET_DOWNLOADED = "Photo not yet downloaded"
+
+        private var instance: EditPresenter? = null
+
+        fun getInstance() =
+            synchronized(this) {
+                instance ?: EditPresenter().also {
+                    instance = it
+                }
+            }
     }
 }

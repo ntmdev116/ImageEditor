@@ -58,11 +58,14 @@ class FilterAdapter : RecyclerView.Adapter<FilterAdapter.FilterTypeViewHolder>()
                 val position = adapterPosition
 
                 val previousPosition = selectedPosition
-                selectedPosition = position
-                notifyItemChanged(position)
-                notifyItemChanged(previousPosition)
 
-                mOnItemClickListener?.onItemClick(mFilterList[position])
+                if (position != previousPosition) {
+                    selectedPosition = position
+                    notifyItemChanged(position)
+                    notifyItemChanged(previousPosition)
+
+                    mOnItemClickListener?.onItemClick(mFilterList[position])
+                }
             }
         }
 

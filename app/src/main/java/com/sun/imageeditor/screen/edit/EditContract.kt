@@ -7,8 +7,9 @@ import com.sun.imageeditor.utils.FilterType
 interface EditContract {
     interface View {
         fun onSaveSuccess()
+        fun onGetProcessedBitmap(bitmap: Bitmap)
         fun onSaveFail(msg: String?)
-        fun onGetFilterPreviewSuccess(filterType: FilterType)
+        fun onGetFilterPreviewSuccess(filterType: FilterType, bitmap: Bitmap)
     }
 
     interface Presenter {
