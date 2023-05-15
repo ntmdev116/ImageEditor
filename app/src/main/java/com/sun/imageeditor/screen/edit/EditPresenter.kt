@@ -51,6 +51,11 @@ class EditPresenter private constructor() : EditContract.Presenter {
         mView = view
     }
 
+    override fun onStop() {
+        mView = null
+        mImageProcessor = null
+    }
+
     fun getFilterPreview(filterType: FilterType) {
         mImageProcessor?.getFilterPreview(
             filterType,

@@ -16,5 +16,6 @@ interface EditContract {
         fun setBitmap(bitmap: Bitmap)
         fun saveBitmap(context: Context?)
         fun setView(view: View)
+        fun onStop()
     }
 }

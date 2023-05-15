@@ -4,6 +4,11 @@ object Constant {
     const val COLLECTION_ID_KEY = "COLLECTION_ID_KEY"
     const val COLLECTION_COVER_PHOTO = "COLLECTION_COVER_PHOTO"
 
+    const val MAX_COLOR_PIXEL = 255
+
+    const val ADJUST_MODIFIER = 2
+    const val ADJUST_MAX_VALUE_TO_DISPLAY = 100
+
     const val PIXELATE_BLOCK_SIZE = 15
 
     const val SEPIA_FIRST_RED = 0.393f

@@ -5,13 +5,15 @@ import android.graphics.Bitmap
 import com.sun.imageeditor.data.repository.source.OnResultListener
 import java.util.concurrent.Executors
 import com.mukesh.image_processing.ImageProcessor
+import com.sun.imageeditor.utils.adjust.BrightnessAdjust
+import com.sun.imageeditor.utils.adjust.ContrastAdjust
 import com.sun.imageeditor.utils.ext.reducedBitmap
 import com.sun.imageeditor.utils.filters.GrayscaleEffectFilter
 import com.sun.imageeditor.utils.filters.PixelateEffectFilter
 import com.sun.imageeditor.utils.filters.SepiaEffectFilter
 import com.sun.imageeditor.utils.filters.VignetteEffectFilter
 
-class ImageProcessor(private val originalImage: Bitmap) {
+class ImageProcessor(originalImage: Bitmap) {
 
     var onResultListener: OnResultListener<Bitmap>? = null
 
@@ -29,18 +31,51 @@ class ImageProcessor(private val originalImage: Bitmap) {
         Pair(EditType.CROP, originalImage),
     )
 
+    private var mEditParameters = EditParameters()
+
     fun edit(editType: EditType, editParameters: EditParameters) {
         val editTypeIndex = mPipeLines.indexOfFirst { it.first == editType }
         mExecutor.execute {
-            when (editType) {
-                EditType.FILTER -> {
-                    val bm = filter(mPipeLines[editTypeIndex - 1].second, editParameters.filterType)
-                    mPipeLines[editTypeIndex] = mPipeLines[editTypeIndex].copy(second = bm)
+            var previousImage: Bitmap
 
-                    onResultListener?.onSuccess(bm)
+            for (i in editTypeIndex until mPipeLines.size) {
+                previousImage = mPipeLines[i - 1].second
+
+                when (mPipeLines[i].first) {
+                    EditType.FILTER -> {
+                        if (editType == EditType.FILTER) {
+                            mEditParameters = mEditParameters.copy(
+                                filterType = editParameters.filterType
+                            )
+                        }
+
+                        onPipeline(previousImage, i, this::filter)
+                    }
+                    EditType.ADJUST -> {
+                        if (editType == EditType.ADJUST) {
+                            mEditParameters = mEditParameters.copy(
+                                brightness = editParameters.brightness,
+                                contrast = editParameters.contrast
+                            )
+                        }
+
+                        onPipeline(previousImage, i, this::adjust)
+                    }
+                    EditType.CROP -> {
+                        onPipeline(previousImage, i, this::crop)
+                    }
+                    EditType.DRAW -> {
+                        onPipeline(previousImage, i, this::draw)
+                    }
+                    EditType.ICON -> {
+                        onPipeline(previousImage, i, this::icon)
+                    }
+
+                    else -> {}
                 }
-                else -> {}
             }
+
+            onResultListener?.onSuccess(mPipeLines.last().second)
         }
     }
 
@@ -48,15 +83,26 @@ class ImageProcessor(private val originalImage: Bitmap) {
         mExecutor.execute {
             val originalIndex = mPipeLines.indexOfFirst { it.first == EditType.ORIGINAL }
 
-            val bm = filter(mPipeLines[originalIndex].second
-                .reducedBitmap(Constant.THUMBNAIL_REDUCE_SIZE), filterType)
+            val bm = filter(
+                mPipeLines[originalIndex].second.reducedBitmap(Constant.THUMBNAIL_REDUCE_SIZE),
+                EditParameters(filterType = filterType)
+            )
 
             listener.onSuccess(bm)
         }
     }
 
-    private fun filter(bitmap: Bitmap, filterType: FilterType?): Bitmap {
-        return when (filterType) {
+    private fun onPipeline(
+        previousBitmap: Bitmap,
+        index: Int,
+        editFunction: (Bitmap, EditParameters) -> Bitmap,
+    ) {
+        val bitmap = editFunction(previousBitmap, mEditParameters)
+        mPipeLines[index] = mPipeLines[index].copy(second = bitmap)
+    }
+
+    private fun filter(bitmap: Bitmap, editParameters: EditParameters): Bitmap {
+        return when (editParameters.filterType) {
             FilterType.PIXELATE -> {
                 PixelateEffectFilter().apply(bitmap)
             }
@@ -76,6 +122,39 @@ class ImageProcessor(private val originalImage: Bitmap) {
         }
     }
 
+    private fun adjust(bitmap: Bitmap, editParameters: EditParameters) : Bitmap {
+        var output = bitmap
+
+        editParameters.brightness?.let {
+            output = BrightnessAdjust().apply(bitmap, it)
+        }
+        editParameters.contrast?.let {
+            output = ContrastAdjust().apply(output, it)
+        }
+        return output
+    }
+
+    private fun crop(bitmap: Bitmap, editParameters: EditParameters) : Bitmap {
+        editParameters.crop?.let {
+            // TODO
+        }
+        return bitmap
+    }
+
+    private fun draw(bitmap: Bitmap, editParameters: EditParameters) : Bitmap {
+        editParameters.draw?.let {
+            // TODO
+        }
+        return bitmap
+    }
+
+    private fun icon(bitmap: Bitmap, editParameters: EditParameters) : Bitmap {
+        editParameters.icon?.let {
+            // TODO
+        }
+        return bitmap
+    }
+
 
     fun saveBitmap(
         fileName: String?,
@@ -84,17 +163,12 @@ class ImageProcessor(private val originalImage: Bitmap) {
     ) {
         mExecutor.execute {
             ImageSaver().saveBitmap(
-                getProcessedImage(),
+                mPipeLines.last().second,
                 fileName,
                 context,
                 onResultListener
             )
         }
-    }
-
-    // current for testing
-    fun getProcessedImage(): Bitmap {
-        return originalImage
     }
 
     companion object {

@@ -21,13 +21,20 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
 ), EditContract.View {
 
     private val mPresenter by lazy { EditPresenter.getInstance() }
+
     private val mDialog by lazy {
         Dialog(AlertDialog.Builder(this, R.style.AlertDialogTheme))
     }
 
     private val editTypeToFragmentMap = mapOf(
         EditType.FILTER to FilterFragment(),
+        EditType.ADJUST to AdjustFragment(),
     )
+
+    override fun onDestroy() {
+        mPresenter.onStop()
+        super.onDestroy()
+    }
 
     override fun initView() {
         checkPermission(WRITE_EXTERNAL_STORAGE)
@@ -62,16 +69,16 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
     }
 
     private fun setupTabLayout() {
-        val list: List<Fragment> = editTypeToFragmentMap.values.toList()
+        val fragments = editTypeToFragmentMap.values.filterIsInstance<Fragment>()
         val adapter = SearchViewPagerAdapter(
             supportFragmentManager,
             lifecycle
-        ).apply { setTabList(list) }
+        ).apply { setTabList(fragments) }
 
         binding.viewPager.adapter = adapter
         binding.viewPager.isUserInputEnabled = false
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = (list[position] as? EditFragment)?.displayName
+            tab.text = (fragments[position] as? EditFragment)?.displayName
         }.attach()
     }
 

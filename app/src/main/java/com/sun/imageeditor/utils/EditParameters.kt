@@ -5,4 +5,8 @@ data class EditParameters(
     val adjustType: Int? = null,
     val brightness: Float? = null,
     val contrast: Float? = null,
+    // these properties for testing
+    val icon: Float? = null,
+    val crop: Float? = null,
+    val draw: Float? = null,
 )
