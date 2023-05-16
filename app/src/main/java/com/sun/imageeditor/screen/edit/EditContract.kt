@@ -13,7 +13,7 @@ interface EditContract {
     }
 
     interface Presenter {
-        fun setBitmap(bitmap: Bitmap)
+        fun setBitmap(bitmap: Bitmap, context: Context)
         fun saveBitmap(context: Context?)
         fun setView(view: View)
         fun onStop()

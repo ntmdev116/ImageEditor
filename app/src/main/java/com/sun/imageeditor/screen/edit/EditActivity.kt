@@ -6,13 +6,16 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sun.imageeditor.R
 import com.sun.imageeditor.databinding.ActivityEditBinding
 import com.sun.imageeditor.screen.search.adapter.SearchViewPagerAdapter
 import com.sun.imageeditor.utils.Dialog
+import com.sun.imageeditor.utils.EditParameters
 import com.sun.imageeditor.utils.EditType
 import com.sun.imageeditor.utils.FilterType
+import com.sun.imageeditor.utils.PointToDraw
 import com.sun.imageeditor.utils.base.BaseActivity
 import com.sun.imageeditor.utils.ext.loadOriginalImageWithUrl
 
@@ -29,7 +32,10 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
     private val editTypeToFragmentMap = mapOf(
         EditType.FILTER to FilterFragment(),
         EditType.ADJUST to AdjustFragment(),
+        EditType.ICON to IconFragment(),
     )
+
+    private var mCurrentEditType = EditType.ORIGINAL
 
     override fun onDestroy() {
         mPresenter.onStop()
@@ -55,10 +61,25 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
             mPresenter.saveBitmap(this)
         }
 
+        binding.imageMain.invalidate()
+        binding.imageMain.setOnButtonDownListener { (x, y) ->
+            if (mCurrentEditType == EditType.ICON) {
+                val coordinate = Pair(x, y)
+                val icon = (editTypeToFragmentMap[mCurrentEditType] as? IconFragment)?.emojiId
+
+                if (icon != null) {
+                    mPresenter.onEditButtonClick(
+                        mCurrentEditType,
+                        EditParameters(icon = PointToDraw(coordinate, icon))
+                    )
+                }
+            }
+        }
+
         val url = intent.getStringExtra(IMAGE_URL)
         url?.let {
             binding.imageMain.loadOriginalImageWithUrl(it, R.color.black, R.drawable.ic_error) {bm ->
-                mPresenter.setBitmap(bm)
+                mPresenter.setBitmap(bm, this)
 
                 // load filter preview when image ready
                 FilterFragment.filterTypes.forEach { type ->
@@ -80,6 +101,25 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = (fragments[position] as? EditFragment)?.displayName
         }.attach()
+
+        binding.tabLayout.run {
+            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    (fragments[selectedTabPosition] as? EditFragment)?.let {
+                        mCurrentEditType = it.editType
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    // TODO
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    // TODO
+                }
+
+            })
+        }
     }
 
     override fun initData() {

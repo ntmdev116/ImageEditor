@@ -33,8 +33,8 @@ class EditPresenter private constructor() : EditContract.Presenter {
 
     }
 
-    override fun setBitmap(bitmap: Bitmap) {
-        mImageProcessor = ImageProcessor(bitmap).apply {
+    override fun setBitmap(bitmap: Bitmap, context: Context) {
+        mImageProcessor = ImageProcessor(bitmap, context).apply {
             onResultListener = object : OnResultListener<Bitmap> {
                 override fun onSuccess(result: Bitmap) {
                     mView?.onGetProcessedBitmap(result)

@@ -4,6 +4,8 @@ object Constant {
     const val COLLECTION_ID_KEY = "COLLECTION_ID_KEY"
     const val COLLECTION_COVER_PHOTO = "COLLECTION_COVER_PHOTO"
 
+    const val TWO = 2
+
     const val MAX_COLOR_PIXEL = 255
 
     const val ADJUST_MODIFIER = 2

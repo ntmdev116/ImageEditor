@@ -7,13 +7,14 @@ import java.util.concurrent.Executors
 import com.mukesh.image_processing.ImageProcessor
 import com.sun.imageeditor.utils.adjust.BrightnessAdjust
 import com.sun.imageeditor.utils.adjust.ContrastAdjust
+import com.sun.imageeditor.utils.draw.IconDraw
 import com.sun.imageeditor.utils.ext.reducedBitmap
 import com.sun.imageeditor.utils.filters.GrayscaleEffectFilter
 import com.sun.imageeditor.utils.filters.PixelateEffectFilter
 import com.sun.imageeditor.utils.filters.SepiaEffectFilter
 import com.sun.imageeditor.utils.filters.VignetteEffectFilter
 
-class ImageProcessor(originalImage: Bitmap) {
+class ImageProcessor(originalImage: Bitmap, private val context: Context) {
 
     var onResultListener: OnResultListener<Bitmap>? = null
 
@@ -32,9 +33,11 @@ class ImageProcessor(originalImage: Bitmap) {
     )
 
     private var mEditParameters = EditParameters()
+    private val mIconList = mutableListOf<PointToDraw>()
 
     fun edit(editType: EditType, editParameters: EditParameters) {
         val editTypeIndex = mPipeLines.indexOfFirst { it.first == editType }
+
         mExecutor.execute {
             var previousImage: Bitmap
 
@@ -68,7 +71,13 @@ class ImageProcessor(originalImage: Bitmap) {
                         onPipeline(previousImage, i, this::draw)
                     }
                     EditType.ICON -> {
-                        onPipeline(previousImage, i, this::icon)
+
+                        editParameters.icon?.let {
+                            mIconList.add(it)
+                        }
+
+                        val bitmap = icon(previousImage, mIconList, context)
+                        mPipeLines[i] = mPipeLines[i].copy(second = bitmap)
                     }
 
                     else -> {}
@@ -148,11 +157,16 @@ class ImageProcessor(originalImage: Bitmap) {
         return bitmap
     }
 
-    private fun icon(bitmap: Bitmap, editParameters: EditParameters) : Bitmap {
-        editParameters.icon?.let {
-            // TODO
+    private fun icon(
+        bitmap: Bitmap,
+        iconList: List<PointToDraw>,
+        context: Context?
+    ) : Bitmap {
+        return if (context != null) {
+            IconDraw().apply(bitmap, iconList, context)
+        } else {
+            bitmap
         }
-        return bitmap
     }
 
 
