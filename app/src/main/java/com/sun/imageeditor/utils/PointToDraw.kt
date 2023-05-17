@@ -1,9 +1,8 @@
 package com.sun.imageeditor.utils
 
+import android.graphics.PointF
+
 data class PointToDraw(
-    val coordinate: Pair<Float, Float>,
+    val coordinate: PointF,
     val redId: Int,
-) {
-    val x = coordinate.first
-    val y = coordinate.second
-}
+)

@@ -21,8 +21,8 @@ class IconDraw : ImageDraw {
             val iconBitmap = BitmapFactory.decodeResource(context.resources, icon)
 
             val centerCoordinate = Pair(
-                coordinate.first - iconBitmap.width / Constant.TWO,
-                coordinate.second - iconBitmap.height / Constant.TWO,
+                coordinate.x - iconBitmap.width / Constant.TWO,
+                coordinate.y - iconBitmap.height / Constant.TWO,
             )
 
             if (centerCoordinate.first > 0 && centerCoordinate.second > 0) {

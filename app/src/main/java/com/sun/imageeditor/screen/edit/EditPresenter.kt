@@ -7,6 +7,7 @@ import com.sun.imageeditor.utils.EditParameters
 import com.sun.imageeditor.utils.EditType
 import com.sun.imageeditor.utils.FilterType
 import com.sun.imageeditor.utils.ImageProcessor
+import com.sun.imageeditor.utils.draw.PathToDraw
 
 class EditPresenter private constructor() : EditContract.Presenter {
     private var mImageProcessor: ImageProcessor? = null
@@ -16,6 +17,28 @@ class EditPresenter private constructor() : EditContract.Presenter {
         if (mImageProcessor != null) {
             mImageProcessor!!.saveBitmap(
                 fileName = null,
+                context,
+                object : OnResultListener<String> {
+                    override fun onSuccess(result: String) {
+                        mView?.onSaveSuccess()
+                    }
+
+                    override fun onFail(msg: String) {
+                        mView?.onSaveFail(msg)
+                    }
+                }
+            )
+        } else {
+            mView?.onSaveFail(NOT_YET_DOWNLOADED)
+        }
+
+    }
+
+    fun saveBitmap(context: Context?, drawPaths: List<PathToDraw>) {
+        if (mImageProcessor != null) {
+            mImageProcessor!!.saveBitmap(
+                fileName = null,
+                drawPaths,
                 context,
                 object : OnResultListener<String> {
                     override fun onSuccess(result: String) {

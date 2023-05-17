@@ -7,12 +7,15 @@ import java.util.concurrent.Executors
 import com.mukesh.image_processing.ImageProcessor
 import com.sun.imageeditor.utils.adjust.BrightnessAdjust
 import com.sun.imageeditor.utils.adjust.ContrastAdjust
+import com.sun.imageeditor.utils.draw.ColorDraw
 import com.sun.imageeditor.utils.draw.IconDraw
+import com.sun.imageeditor.utils.draw.PathToDraw
 import com.sun.imageeditor.utils.ext.reducedBitmap
 import com.sun.imageeditor.utils.filters.GrayscaleEffectFilter
 import com.sun.imageeditor.utils.filters.PixelateEffectFilter
 import com.sun.imageeditor.utils.filters.SepiaEffectFilter
 import com.sun.imageeditor.utils.filters.VignetteEffectFilter
+
 
 class ImageProcessor(originalImage: Bitmap, private val context: Context) {
 
@@ -35,7 +38,11 @@ class ImageProcessor(originalImage: Bitmap, private val context: Context) {
     private var mEditParameters = EditParameters()
     private val mIconList = mutableListOf<PointToDraw>()
 
-    fun edit(editType: EditType, editParameters: EditParameters) {
+    fun edit(
+        editType: EditType,
+        editParameters: EditParameters,
+        onCompleteListener: (() -> Any)? = null,
+    ) {
         val editTypeIndex = mPipeLines.indexOfFirst { it.first == editType }
 
         mExecutor.execute {
@@ -68,7 +75,12 @@ class ImageProcessor(originalImage: Bitmap, private val context: Context) {
                         onPipeline(previousImage, i, this::crop)
                     }
                     EditType.DRAW -> {
-                        onPipeline(previousImage, i, this::draw)
+                        if (editParameters.draw != null) {
+                            val bitmap = draw(previousImage, editParameters.draw)
+                            mPipeLines[i] = mPipeLines[i].copy(second = bitmap)
+                        } else {
+                            mPipeLines[i] = mPipeLines[i].copy(second = previousImage)
+                        }
                     }
                     EditType.ICON -> {
 
@@ -85,6 +97,7 @@ class ImageProcessor(originalImage: Bitmap, private val context: Context) {
             }
 
             onResultListener?.onSuccess(mPipeLines.last().second)
+            onCompleteListener?.invoke()
         }
     }
 
@@ -150,11 +163,8 @@ class ImageProcessor(originalImage: Bitmap, private val context: Context) {
         return bitmap
     }
 
-    private fun draw(bitmap: Bitmap, editParameters: EditParameters) : Bitmap {
-        editParameters.draw?.let {
-            // TODO
-        }
-        return bitmap
+    private fun draw(bitmap: Bitmap, pathList: List<PathToDraw>) : Bitmap {
+        return  ColorDraw().apply(bitmap, pathList)
     }
 
     private fun icon(
@@ -162,7 +172,7 @@ class ImageProcessor(originalImage: Bitmap, private val context: Context) {
         iconList: List<PointToDraw>,
         context: Context?
     ) : Bitmap {
-        return if (context != null) {
+        return if (context != null && iconList.isNotEmpty()) {
             IconDraw().apply(bitmap, iconList, context)
         } else {
             bitmap
@@ -182,6 +192,24 @@ class ImageProcessor(originalImage: Bitmap, private val context: Context) {
                 context,
                 onResultListener
             )
+        }
+    }
+
+    fun saveBitmap(
+        fileName: String?,
+        drawPaths: List<PathToDraw>,
+        context: Context?,
+        onResultListener: OnResultListener<String>,
+    ) {
+        mExecutor.execute {
+            edit(EditType.DRAW, EditParameters(draw = drawPaths)) {
+                ImageSaver().saveBitmap(
+                    mPipeLines.last().second,
+                    fileName,
+                    context,
+                    onResultListener
+                )
+            }
         }
     }
 

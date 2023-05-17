@@ -2,6 +2,7 @@ package com.sun.imageeditor.screen.edit
 
 import android.Manifest
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AlertDialog
@@ -33,6 +34,13 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
         EditType.FILTER to FilterFragment(),
         EditType.ADJUST to AdjustFragment(),
         EditType.ICON to IconFragment(),
+        EditType.DRAW to DrawFragment().also {
+            it.setSettingChanged { (color, size) ->
+                binding.imageMain.color = color
+                binding.imageMain.size = size
+            }
+            it
+        },
     )
 
     private var mCurrentEditType = EditType.ORIGINAL
@@ -58,20 +66,31 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
         }
         binding.buttonDownload.setOnClickListener {
             mDialog.showLoadingDialog()
-            mPresenter.saveBitmap(this)
+
+            val image = Bitmap.createBitmap(
+                binding.imageMain.measuredWidth,
+                binding.imageMain.measuredHeight,
+                Bitmap.Config.ARGB_8888
+            )
+
+            val canvas = Canvas(image)
+
+            binding.imageMain.draw(canvas)
+
+            mPresenter.saveBitmap(this, binding.imageMain.clickPaths)
         }
 
-        binding.imageMain.invalidate()
-        binding.imageMain.setOnButtonDownListener { (x, y) ->
-            if (mCurrentEditType == EditType.ICON) {
-                val coordinate = Pair(x, y)
-                val icon = (editTypeToFragmentMap[mCurrentEditType] as? IconFragment)?.emojiId
+        binding.imageMain.apply {
+            setOnButtonDownListener {
+                if (mCurrentEditType == EditType.ICON) {
+                    val icon = (editTypeToFragmentMap[mCurrentEditType] as? IconFragment)?.emojiId
 
-                if (icon != null) {
-                    mPresenter.onEditButtonClick(
-                        mCurrentEditType,
-                        EditParameters(icon = PointToDraw(coordinate, icon))
-                    )
+                    if (icon != null) {
+                        mPresenter.onEditButtonClick(
+                            mCurrentEditType,
+                            EditParameters(icon = PointToDraw(it, icon))
+                        )
+                    }
                 }
             }
         }
@@ -108,6 +127,8 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
                     (fragments[selectedTabPosition] as? EditFragment)?.let {
                         mCurrentEditType = it.editType
                     }
+
+                    binding.imageMain.canDraw = fragments[selectedTabPosition] is DrawFragment
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -147,6 +168,7 @@ class EditActivity : BaseActivity<ActivityEditBinding>(
     override fun onGetProcessedBitmap(bitmap: Bitmap) {
         Handler(Looper.getMainLooper()).post {
             binding.imageMain.setImageBitmap(bitmap)
+            binding.imageMain.invalidate()
         }
     }
 

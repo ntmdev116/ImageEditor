@@ -30,4 +30,9 @@
         <item name="android:windowBackground">@drawable/dialog_shape</item>
         <item name="android:textColorPrimary">@color/grey</item>
     </style>
+
+    <style name="CustomSeekBarDiscretePoint" parent="@style/Widget.AppCompat.SeekBar.Discrete">
+        <item name="tickMarkTint">@color/white</item>
+    </style>
+
 </resources>

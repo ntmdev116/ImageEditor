@@ -8,6 +8,8 @@ object Constant {
 
     const val MAX_COLOR_PIXEL = 255
 
+    const val COLOR_DRAW_MODIFIER = 10
+
     const val ADJUST_MODIFIER = 2
     const val ADJUST_MAX_VALUE_TO_DISPLAY = 100
 
